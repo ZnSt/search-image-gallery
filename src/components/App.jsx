@@ -5,7 +5,7 @@ import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
 
 export const App = () => {
-  const [userSearch, setUserSearch] = useState('');
+  const [setUserSearch] = useState('');
 
   useEffect(() => {
     fetch();
