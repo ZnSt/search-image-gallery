@@ -1,10 +1,10 @@
 import { Overlay, ModalWindow } from './Modal.styled';
 
-export const Modal = () => {
+export const Modal = ({ largeImageURL, closeModal }) => {
   return (
-    <Overlay class="overlay">
-      <ModalWindow class="modal">
-        <img src="" alt="" />
+    <Overlay onClick={closeModal}>
+      <ModalWindow>
+        <img src={largeImageURL} alt="" />
       </ModalWindow>
     </Overlay>
   );

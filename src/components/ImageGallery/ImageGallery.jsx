@@ -2,11 +2,24 @@ import { useState, useEffect } from 'react';
 import { List } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import { Button } from 'components/Button';
+import { Modal } from 'components/Modal';
 
 export const ImageGallery = ({ nameImage }) => {
   const [imageName, setImageName] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [largeImage, setLargeImage] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const seeImage = img => {
+    setIsModalOpen(true);
+    setLargeImage(img);
+  };
+
+  const closeModal = () => {
+    setLargeImage('');
+  };
 
   const KEY = '25755107-c5ecbaee54c3d5c87c2809c98';
   const host = 'https://pixabay.com/api/';
@@ -16,6 +29,7 @@ export const ImageGallery = ({ nameImage }) => {
       return;
     }
     setLoading(true);
+    setImageName(null);
     setTimeout(() => {
       fetch(
         `${host}?q=${nameImage}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
@@ -24,7 +38,7 @@ export const ImageGallery = ({ nameImage }) => {
         .then(image => setImageName(image))
         .catch(error => setError(error))
         .finally(setLoading(false));
-    }, 3000);
+    }, 2000);
   }, [nameImage]);
 
   return (
@@ -41,11 +55,14 @@ export const ImageGallery = ({ nameImage }) => {
           <ImageGalleryItem
             key={id}
             webformatURL={webformatURL}
-            largeImageURL={largeImageURL}
+            openModal={() => seeImage(largeImageURL)}
           />
         ))}
       </List>
       {imageName && <Button />}
+      {largeImage && (
+        <Modal largeImageURL={largeImage} closeModal={closeModal} />
+      )}
     </div>
   );
 };
