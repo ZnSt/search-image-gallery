@@ -3,6 +3,7 @@ import { List } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { Loader } from 'components/Loader';
 
 export const ImageGallery = ({ nameImage }) => {
   const [imageName, setImageName] = useState(null);
@@ -49,7 +50,7 @@ export const ImageGallery = ({ nameImage }) => {
       }}
     >
       {error && <h1>Hold On!</h1>}
-      {loading && <div>Загружаем...</div>}
+      {loading && <Loader />}
 
       <List>
         {imageName?.hits.map(({ id, webformatURL, largeImageURL }) => (
