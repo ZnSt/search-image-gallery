@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 export const Item = styled.li`
   border-radius: 2px;
+  cursor: pointer;
 `;
 
 export const Img = styled.img`

@@ -12,12 +12,13 @@ export const ImageGallery = ({ nameImage }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const seeImage = img => {
+  const openModal = img => {
     setIsModalOpen(true);
     setLargeImage(img);
   };
 
   const closeModal = () => {
+    setIsModalOpen(false);
     setLargeImage('');
   };
 
@@ -32,7 +33,7 @@ export const ImageGallery = ({ nameImage }) => {
     setImageName(null);
     setTimeout(() => {
       fetch(
-        `${host}?q=${nameImage}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
+        `${host}?q=${nameImage}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=20`
       )
         .then(response => response.json())
         .then(image => setImageName(image))
@@ -55,7 +56,7 @@ export const ImageGallery = ({ nameImage }) => {
           <ImageGalleryItem
             key={id}
             webformatURL={webformatURL}
-            openModal={() => seeImage(largeImageURL)}
+            openModal={() => openModal(largeImageURL)}
           />
         ))}
       </List>
