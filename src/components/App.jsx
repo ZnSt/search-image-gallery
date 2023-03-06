@@ -1,51 +1,43 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Countries } from './Countries';
+import { Paginations } from './Paginatios';
 
 export const App = () => {
-  const [photos, setPhotos] = useState([]);
+  const [countries, setCountries] = useState([]);
+
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fetching, setFetching] = useState(true);
+  const [countriesPerPage] = useState(10);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://jsonplaceholder.typicode.com/photos?_limit=10&_page=${currentPage}`
-      )
-      .then(response => {
-        setPhotos([...photos, ...response.data]);
-        setCurrentPage(prevState => prevState + 1);
-      })
-      .finally(() => setFetching(false));
-  }, [fetching]);
-
-  useEffect(() => {
-    document.addEventListener('scroll', scrollHandler);
-
-    return () => {
-      document.removeEventListener('scroll', scrollHandler);
+    const getCountries = async () => {
+      setLoading(true);
+      const response = await axios.get(`https://restcountries.com/v3.1/all`);
+      setCountries(response.data);
+      setLoading(false);
     };
+
+    getCountries();
   }, []);
 
-  const scrollHandler = event => {
-    if (
-      event.target.documentElement.scrollHeight -
-        (event.target.documentElement.scrollTop + window.innerHeight) <
-      100
-    ) {
-      console.log('scroll');
-      setFetching(true);
-    }
+  const lastCountryIndex = currentPage * countriesPerPage;
+  const firstCountryIndex = lastCountryIndex - countriesPerPage;
+  const currentCountry = countries.slice(firstCountryIndex, lastCountryIndex);
+
+  const paginate = pageNumber => {
+    setCurrentPage(pageNumber);
   };
+
   return (
     <div>
-      {photos.map(photo => (
-        <div key={photo.id}>
-          <div>
-            {photo.id}. {photo.title}
-          </div>
-          <img src={photo.thumbnailUrl} alt="" />
-        </div>
-      ))}
+      <h1>Countries</h1>
+      <Countries countries={currentCountry} loading={loading} />
+      <Paginations
+        countriesPerPage={countriesPerPage}
+        totalCountries={countries.length}
+        paginate={paginate}
+      />
     </div>
   );
 };
