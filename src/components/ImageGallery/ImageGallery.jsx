@@ -7,7 +7,7 @@ import { Loader } from 'components/Loader';
 
 export const ImageGallery = ({ nameImage }) => {
   const [imageName, setImageName] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setIsModalOpen] = useState(false);
 
   const [largeImage, setLargeImage] = useState('');
   const [loading, setLoading] = useState(false);
