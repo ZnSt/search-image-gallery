@@ -5,6 +5,7 @@ import { Loader } from 'components/Loader';
 
 import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
+import { BtnUp } from './BtnUp';
 
 const KEY = '25755107-c5ecbaee54c3d5c87c2809c98';
 const host = 'https://pixabay.com/api/';
@@ -15,6 +16,24 @@ export const App = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [backToUp, setBackToUp] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        setBackToUp(true);
+      } else {
+        setBackToUp(false);
+      }
+    });
+  }, []);
+
+  const scrollUp = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   useEffect(() => {
     if (!userSearch) {
@@ -22,18 +41,15 @@ export const App = () => {
     }
     setLoading(true);
 
-    setTimeout(() => {
-      fetch(
-        `${host}?q=${userSearch}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=20`
-      )
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          setImages(prev => [...prev, ...data.hits]);
-        })
-        .catch(error => setError(error))
-        .finally(setLoading(false));
-    }, 2000);
+    fetch(
+      `${host}?q=${userSearch}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=20`
+    )
+      .then(response => response.json())
+      .then(data => {
+        setImages(prev => [...prev, ...data.hits]);
+      })
+      .catch(error => setError(error))
+      .finally(setLoading(false));
   }, [userSearch, page]);
 
   const handleFormSubmit = value => {
@@ -48,6 +64,7 @@ export const App = () => {
 
   return (
     <div>
+      {backToUp && <BtnUp scrollUp={scrollUp} />}
       <Searchbar onSubmit={handleFormSubmit} />
       <ImageGallery images={images} />
       <ToastContainer autoClose={4000} />
