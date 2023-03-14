@@ -15,7 +15,7 @@ export const App = () => {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [setError] = useState(null);
+
   const [backToUp, setBackToUp] = useState(false);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export const App = () => {
       .then(data => {
         setImages(prev => [...prev, ...data.hits]);
       })
-      .catch(error => setError(error))
+      .catch(error => console.log(error))
       .finally(setLoading(false));
   }, [userSearch, page]);
 
