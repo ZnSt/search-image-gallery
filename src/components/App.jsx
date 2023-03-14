@@ -16,7 +16,7 @@ export const App = () => {
         setCurrentPage(prevState => prevState + 1);
       })
       .finally(() => setFetching(false));
-  }, [fetching]);
+  }, [currentPage, photos, fetching]);
 
   useEffect(() => {
     document.addEventListener('scroll', scrollHandler);
